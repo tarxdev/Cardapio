@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurante Mexicano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+
+     .menu-item .desc {
+      display: none;
+    }
+     .menu-item:hover .desc {
+      display: block;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #fff8f0;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: #e65100;
+      color: #fff;
+      padding: 24px 0;
+      text-align: center;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
+    }
+    nav {
+      background: #ff9800;
+      padding: 10px 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.2s, transform 0.2s;
+      position: relative;
+    }
+    nav a:hover {
+      color: #e65100;
+      transform: scale(1.1);
+    }
+    .slideshow-container {
+      position: relative;
+      width: 100vw;
+      max-width: 100vw;
+      height: 320px;
+      margin: 0;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .slide {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      display: block;
+      will-change: transform;
+      transition: transform 0.5s;
+    }
+    .caption {
+      color: #fff;
+      font-size: 1.3em;
+      position: absolute;
+      bottom: 16px;
+      left: 24px;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 5px;
+      letter-spacing: 1px;
+      animation: destaque 1.5s infinite alternate;
+    }
+    @keyframes destaque {
+      0% { box-shadow: 0 0 10px 2px #ff9800;}
+      100% { box-shadow: 0 0 20px 6px #e65100;}
+    }
+    .fade {
+      animation: fade 1.5s;
+    }
+    @keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    section {
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s, transform 1s;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h2 {
+      color: #e65100;
+      margin-top: 40px;
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(-30px);
+      transition: opacity 1s, transform 1s;
+    }
+    h2.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .menu-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .menu-item {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 0;
+      flex: 1 1 220px;
+      min-width: 220px;
+      max-width: 260px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      perspective: 800px;
+      height: 340px;
+      margin-bottom: 10px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1s, transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .menu-item.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.4,2,.6,1);
+      transform-style: preserve-3d;
+    }
+    .menu-item:hover .card-inner,
+    .menu-item.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .card-front {
+      background: #fff;
+      z-index: 2;
+    }
+    .card-back {
+      background: #ffe0b2;
+      color: #e65100;
+      transform: rotateY(180deg);
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(230,81,0,0.10);
+    }
+    .menu-item img {
+      width: 110%;
+      height: 160px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: transform 0.3s;
+    }
+    .menu-item h3 {
+      margin: 10px 0 6px 0;
+      color: #e65100;
+      font-size: 1.1em;
+    }
+    .menu-item .preco {
+      color: #388e3c;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-top: auto;
+    }
+    .card-back .desc {
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+    .chef-sug {
+      background: #ffe0b2;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      animation: fade 1.5s;
+    }
+    .chef-sug h3 {
+      color: #d84315;
+      margin-top: 0;
+    }
+    .depoimentos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+    }
+    .depoimento {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 18px;
+      flex: 1 1 220px;
+      min-width: 220px;
+      max-width: 320px;
+      font-style: italic;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 1s, transform 1s;
+    }
+    .depoimento.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .depoimento::before {
+      content: "“";
+      font-size: 2em;
+      color: #ff9800;
+      position: absolute;
+      left: 10px;
+      top: 0;
+    }
+    .depoimento .cliente {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #e65100;
+      font-style: normal;
+    }
+    form {
+      background: #fff3e0;
+      border-radius: 10px;
+      padding: 24px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s, transform 1s;
+    }
+    form.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    form label {
+      font-weight: bold;
+      color: #e65100;
+      margin-bottom: 4px;
+    }
+    form input, form textarea {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 8px;
+      font-size: 1em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    form button {
+      background: #e65100;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.2s;
+      animation: pulsar 1.2s infinite alternate;
+    }
+    form button:hover {
+      background: #ff9800;
+      transform: scale(1.07);
+    }
+    @keyframes pulsar {
+      0% { box-shadow: 0 0 0 0 #e6510040;}
+      100% { box-shadow: 0 0 16px 6px #ff980040;}
+    }
+    footer {
+      background: #e65100;
+      color: #fff;
+      text-align: center;
+      padding: 18px 0;
+      margin-top: 40px;
+      letter-spacing: 1px;
+    }
+    @media (max-width: 1100px) {
+      main {
+        max-width: 100%;
+      }
+      .menu-grid, .depoimentos {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    @media (max-width: 600px) {
+      .slideshow-container {
+        height: 180px;
+      }
+      .caption {
+        font-size: 1em;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        padding: 8px 12px;
+      }
+      form {
+        padding: 12px;
+      }
+      .menu-item {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Restaurante Mexicano</h1>
+    <p>Sabores autênticos do México para você!</p>
+  </header>
+  <nav>
+    <a href="#entradas">Entradas</a>
+    <a href="#principais">Pratos Principais</a>
+    <a href="#acompanhamentos">Acompanhamentos</a>
+    <a href="#sobremesas">Sobremesas</a>
+    <a href="#bebidas">Bebidas</a>
+    <a href="#chef">Sugestões do Chefe</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <!-- Slideshow dos pratos mais vendidos -->
+  <div class="slideshow-container" id="parallax-slideshow">
+    <div class="slide fade">
+      <img src="https://static.itdg.com.br/images/360-240/763a97fad5636232d9ffe30955b44acf/347923-original.jpg" alt="Taco Mexicano">
+      <div class="caption">Taco Mexicano - O mais pedido da casa!</div>
+    </div>
+    <div class="slide fade">
+      <img src="https://i.ibb.co/v43fPTck/CAPA-MATERIAS-THE-DATE-NEWS-1086-x-668-px-2024-12-18-T101543-670.png" alt="Burrito Especial">
+      <div class="caption">Burrito Especial - Sabor e tradição</div>
+    </div>
+    <div class="slide fade">
+      <img src="https://i.ibb.co/PZVFpbq0/Nachos-1.jpg" alt="Nachos Supreme">
+      <div class="caption">Nachos Supreme - Perfeito para compartilhar</div>
+    </div>
+    <div class="slide fade">
+      <img src="https://i.ibb.co/svRtvFJk/depositphotos-87096052-stock-photo-churros-and-hot-chocolate-close.webp" alt="Churros Mexicanos">
+      <div class="caption">Churros Mexicanos - Sobremesa irresistível</div>
+    </div>
+    <div class="slide fade">
+      <img src="https://i.ibb.co/hRfzJpqN/1207-Marguerita-Cla-ssica.jpg" alt="Margarita Tradicional">
+      <div class="caption">Margarita Tradicional - Refrescante e autêntica</div>
+    </div>
+    <div class="slide fade">
+      <img src="https://www.minhareceita.com.br/app/uploads/2019/09/quesadilla-de-frango-e-tomate-portal-minha-receita-1.jpg" alt="Quesadilla de Frango">
+      <div class="caption">Quesadilla de Frango - Suculenta e saborosa</div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Entradas -->
+    <section id="entradas">
+      <h2>Entradas</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://receitadaboa.com.br/wp-content/uploads/2024/07/Imagem-ilustrativa-de-guacamole.webp" alt="Guacamole"><h3>Guacamole</h3><div class="preco">R$ 18,00</div></div><div class="card-back"><div class="desc">Creme de abacate temperado, servido com nachos crocantes.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://s2.glbimg.com/2SKvNMRVZ9maF1sedkLpUJN8RBU=/620x400/e.glbimg.com/og/ed/f/original/2014/01/21/si_senor_quesadilla2__divulgacao.jpg" alt="Quesadilla de Queijo"><h3>Quesadilla de Queijo</h3><div class="preco">R$ 16,00</div></div><div class="card-back"><div class="desc">Tortilla recheada com queijo derretido e ervas.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI-qe1SF8GN0g0W9haBro0dE7FGZJasY00TVQ5U0T-c1RKxlK0tOZyjeEA19rn3Q3hF18&usqp=CAU" alt="Sopa Azteca"><h3>Sopa Azteca</h3><div class="preco">R$ 20,00</div></div><div class="card-back"><div class="desc">Sopa de tomate com tiras de tortilla, queijo e abacate.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScw8q6qiGBiKbvXGOS1z20FvNHEVsAN8gxZQ&s" alt="Elote"><h3>Elote</h3><div class="preco">R$ 14,00</div></div><div class="card-back"><div class="desc">Milho grelhado com maionese, queijo e páprica.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT78tVQlSVLCobZcaBjHkgRFR95shh_QuUyRQ&s" alt="Ceviche Mexicano"><h3>Ceviche Mexicano</h3><div class="preco">R$ 22,00</div></div><div class="card-back"><div class="desc">Peixe marinado com limão, tomate, cebola e coentro.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.ibb.co/8DQN3R1t/Nachos-1.jpg" alt="Nachos Supreme"><h3>Nachos Supreme</h3><div class="preco">R$ 24,00</div></div><div class="card-back"><div class="desc">Nachos com carne, queijo, feijão, sour cream e jalapeños.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.finedininglovers.com/es/sites/g/files/xknfdk1706/files/2023-09/Mexican_Tostadas.jpg" alt="Tostada Mexicana"><h3>Tostada Mexicana</h3><div class="preco">R$ 19,00</div></div><div class="card-back"><div class="desc">Tortilla crocante coberta com feijão, carne, alface e queijo.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.thespicehouse.com/cdn/shop/articles/Burriquitas_Mini_Burritos_720x.jpg?v=1586287018" alt="Mini Burrito"><h3>Mini Burrito</h3><div class="preco">R$ 17,00</div></div><div class="card-back"><div class="desc">Mini burrito recheado com carne e queijo, servido com molho especial.</div></div></div></div>
+      </div>
+    </section>
+    <!-- Pratos Principais -->
+    <section id="principais">
+      <h2>Pratos Principais</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://static.itdg.com.br/images/360-240/763a97fad5636232d9ffe30955b44acf/347923-original.jpg" alt="Taco Mexicano"><h3>Taco Mexicano</h3><div class="preco">R$ 39,00</div></div><div class="card-back"><div class="desc">Tortilla crocante recheada com carne, alface, queijo e molho especial.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.ibb.co/v43fPTck/CAPA-MATERIAS-THE-DATE-NEWS-1086-x-668-px-2024-12-18-T101543-670.png" alt="Burrito Especial"><h3>Burrito Especial</h3><div class="preco">R$ 32,00</div></div><div class="card-back"><div class="desc">Tortilla macia recheada com carne, feijão, arroz, queijo e guacamole.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.comidaereceitas.com.br/wp-content/uploads/2011/05/enchiladas-de-frango-com-foto-macro-em-pub-rustico-de-pedra-ia-generativa-780x437.jpg" alt="Enchilada de Frango"><h3>Enchilada de Frango</h3><div class="preco">R$ 30,00</div></div><div class="card-back"><div class="desc">Tortilla recheada com frango, molho de tomate e queijo gratinado.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://cptstatic.s3.amazonaws.com/imagens/enviadas/materias/materia10793/comida-mexicana-receita-de-fajitas-cpt.jpg" alt="Fajitas de Carne"><h3>Fajitas de Carne</h3><div class="preco">R$ 36,00</div></div><div class="card-back"><div class="desc">Tiras de carne grelhada com pimentões e cebola, acompanhadas de tortillas.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.pingodoce.pt/wp-content/uploads/2022/09/chilli-com-carne-pingo-doce.jpg" alt="Chili com Carne"><h3>Chili com Carne</h3><div class="preco">R$ 29,00</div></div><div class="card-back"><div class="desc">Carne moída cozida com feijão, tomate e especiarias.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.minhareceita.com.br/app/uploads/2019/09/quesadilla-de-frango-e-tomate-portal-minha-receita-1.jpg" alt="Quesadilla de Frango"><h3>Quesadilla de Frango</h3><div class="preco">R$ 27,00</div></div><div class="card-back"><div class="desc">Tortilla recheada com frango, queijo e especiarias, grelhada até dourar.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://veggiefestchicago.org/wp-content/uploads/2022/02/Classic-Tacos-B-Wb-1.jpg" alt="Taco Vegano"><h3>Taco Vegano</h3><div class="preco">R$ 26,00</div></div><div class="card-back"><div class="desc">Taco recheado com proteína de soja, legumes e guacamole.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLURvC8UhQlW4d5nFcwkbV4ADVqIfRr1i75w&s" alt="Combo Fiesta Mexicana"><h3>Combo Fiesta Mexicana</h3><div class="preco">R$ 69,90</div></div><div class="card-back"><div class="desc">Entrada, prato principal, acompanhamento, sobremesa e bebida.</div></div></div></div>
+      </div>
+    </section>
+    <!-- Acompanhamentos -->
+    <section id="acompanhamentos">
+      <h2>Acompanhamentos</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://mejorconsalud.as.com/wp-content/uploads/2021/09/arroz-mexicano.jpg" alt="Arroz Mexicano"><h3>Arroz Mexicano</h3><div class="preco">R$ 10,00</div></div><div class="card-back"><div class="desc">Arroz temperado com tomate, alho e especiarias.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.panelinha.com.br/i1/bk-2772-frijoles-refritos.webp" alt="Feijão Refrito"><h3>Feijão Refrito</h3><div class="preco">R$ 10,00</div></div><div class="card-back"><div class="desc">Feijão cozido e refogado com temperos mexicanos.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://buenofoods.com/wp-content/uploads/2015/04/Tamales.jpg" alt="Tamales"><h3>Tamales</h3><div class="preco">R$ 12,00</div></div><div class="card-back"><div class="desc">Massa de milho recheada com carne, envolta em folhas de milho e cozida no vapor.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://img.cybercook.com.br/receitas/543/salsa-mexicana-pico-de-gallo-2.jpeg" alt="Pico de Gallo"><h3>Pico de Gallo</h3><div class="preco">R$ 9,00</div></div><div class="card-back"><div class="desc">Salada fresca de tomate, cebola, coentro e limão.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://s2-receitas.glbimg.com/s2Kb-EKf_7S5_exZg2AU9vMCa9c=/0x0:1280x853/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2020/Z/N/7ClFCvSkaY3gSZRfgHZQ/sour-cream.jpeg" alt="Sour Cream"><h3>Sour Cream</h3><div class="preco">R$ 8,00</div></div><div class="card-back"><div class="desc">Creme azedo tradicional mexicano.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://static.itdg.com.br/images/640-440/b7a7730d112e57b9a54c81067ec3081c/333845-original.jpg" alt="Nachos Simples"><h3>Nachos Simples</h3><div class="preco">R$ 11,00</div></div><div class="card-back"><div class="desc">Porção de nachos crocantes.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://media-cdn.tripadvisor.com/media/photo-s/1c/c6/56/3b/batata-mexicana-batata.jpg" alt="Batata Mexicana"><h3>Batata Mexicana</h3><div class="preco">R$ 13,00</div></div><div class="card-back"><div class="desc">Batatas rústicas com páprica e molho picante.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://cdn7.kiwilimon.com/recetaimagen/36291/960x640/44844.jpg.jpg" alt="Salada de Nopales"><h3>Salada de Nopales</h3><div class="preco">R$ 15,00</div></div><div class="card-back"><div class="desc">Salada de cacto, tomate, cebola e coentro.</div></div></div></div>
+      </div>
+    </section>
+    <!-- Sobremesas -->
+    <section id="sobremesas">
+      <h2>Sobremesas</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.ibb.co/svRtvFJk/depositphotos-87096052-stock-photo-churros-and-hot-chocolate-close.webp" alt="Churros Mexicanos"><h3>Churros Mexicanos</h3><div class="preco">R$ 14,00</div></div><div class="card-back"><div class="desc">Churros recheados com doce de leite e açúcar com canela.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.allrecipes.com/thmb/0RRXJLJqN1Ek4ICOkxUGNMLAEWs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4485442-58b33eae8ca844589869edb287572626.jpg" alt="Flan Mexicano"><h3>Flan Mexicano</h3><div class="preco">R$ 13,00</div></div><div class="card-back"><div class="desc">Pudim de leite condensado com calda de caramelo.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.allrecipes.com/thmb/Cb0wYk4WlCtmxOIav1ZJuB9d5cE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/221907-Pastel-de-Tres-Leches_Melissa-Goff_5014610_original-4x3-1-1381d72b98a64f9b814e16e41575435a.jpg" alt="Pastel de Tres Leches"><h3>Pastel de Tres Leches</h3><div class="preco">R$ 15,00</div></div><div class="card-back"><div class="desc">Bolo molhado com três tipos de leite.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.pinimg.com/736x/33/8a/c6/338ac6c96e415912f1bbe9edb56fcf6f.jpg" alt="Paleta Mexicana"><h3>Paleta Mexicana</h3><div class="preco">R$ 10,00</div></div><div class="card-back"><div class="desc">Picolé artesanal de frutas tropicais.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROND2Xr_maRw7SQSPrTm7_MlAVlSXd2YRzKA&s" alt="Arroz Doce"><h3>Arroz Doce</h3><div class="preco">R$ 9,00</div></div><div class="card-back"><div class="desc">Arroz doce cremoso com canela.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://s2-receitas.glbimg.com/k_vwthLwsTZt85TI0oiDevhHpVo=/0x0:5472x3648/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_1f540e0b94d8437dbbc39d567a1dee68/internal_photos/bs/2021/A/v/kcE1rvTqiFpJ6T4NSggQ/brownie-picante-2-.jpg" alt="Brownie de Chocolate com Pimenta"><h3>Brownie de Chocolate com Pimenta</h3><div class="preco">R$ 12,00</div></div><div class="card-back"><div class="desc">Brownie de chocolate com toque de pimenta mexicana.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://www.tasteofhome.com/wp-content/uploads/2022/08/Cocadas-FT-Ericka-Sanchez-for-Taste-of-Home-JVedit.jpg" alt="Cocada Mexicana"><h3>Cocada Mexicana</h3><div class="preco">R$ 11,00</div></div><div class="card-back"><div class="desc">Doce de coco cremoso ao estilo mexicano.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO0pL_YoekEb0yAjyHzoVXAN4cZIJp0HdpDQ&s" alt="Gelatina Colorida"><h3>Gelatina Colorida</h3><div class="preco">R$ 8,00</div></div><div class="card-back"><div class="desc">Gelatina de sabores variados, tradicional em festas mexicanas.</div></div></div></div>
+      </div>
+    </section>
+    <!-- Bebidas -->
+    <section id="bebidas">
+      <h2>Bebidas</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://i.ibb.co/hRfzJpqN/1207-Marguerita-Cla-ssica.jpg" alt="Margarita Tradicional"><h3>Margarita Tradicional</h3><div class="preco">R$ 18,00</div></div><div class="card-back"><div class="desc">Coquetel clássico de tequila, limão e licor de laranja.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://hips.hearstapps.com/hmg-prod/images/michelada-socialindex-web-2863-rl-del039925-680a6cff5cb20.jpg?crop=0.888888888888889xw:1xh;center,top&resize=1200:*" alt="Michelada"><h3>Michelada</h3><div class="preco">R$ 16,00</div></div><div class="card-back"><div class="desc">Cerveja mexicana com limão, sal e especiarias.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://img.freepik.com/fotos-premium/vista-aproximada-em-duas-xicaras-de-cha-com-gelo-e-petalas-de-hibisco-secas-no-fundo-da-mesa-de-madeira-branca_571379-1115.jpg" alt="Água Fresca de Hibisco"><h3>Água Fresca de Hibisco</h3><div class="preco">R$ 10,00</div></div><div class="card-back"><div class="desc">Bebida refrescante de hibisco com limão.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgWNvTMaB2ynRosrfSPJ8rcU-a6bDKFCk_Sg&s" alt="Tequila Shot"><h3>Tequila Shot</h3><div class="preco">R$ 12,00</div></div><div class="card-back"><div class="desc">Shot de tequila com limão e sal.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://preview.redd.it/is-mexican-soda-better-than-american-soda-v0-f6sk7md6kxkc1.jpg?width=640&crop=smart&auto=webp&s=af2709fcad6f9efca329bf69fd882732f43ca21c" alt="Refrigerante Mexicano"><h3>Refrigerante Mexicano</h3><div class="preco">R$ 8,00</div></div><div class="card-back"><div class="desc">Sabores variados: Jarritos, Sidral, etc.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://engarrafadormoderno.com.br/wp-content/uploads/2024/05/Agua-Mineral-Qualidade_1.jpg" alt="Água Mineral"><h3>Água Mineral</h3><div class="preco">R$ 5,00</div></div><div class="card-back"><div class="desc">Com ou sem gás.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://paribar.com.br/wp-content/uploads/2022/03/marguerita-de-morango-1.jpg" alt="Margarita de Morango"><h3>Margarita de Morango</h3><div class="preco">R$ 20,00</div></div><div class="card-back"><div class="desc">Versão especial da margarita, com morangos frescos.</div></div></div></div>
+        <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/99636556-4A2C-4D83-AF0D-DBC90B85A501/Derivates/6fea59e8-620b-4ca3-9204-a0543d882dda.jpg" alt="Água de Horchata"><h3>Água de Horchata</h3><div class="preco">R$ 9,00</div></div><div class="card-back"><div class="desc">Bebida doce de arroz, canela e leite, típica do México.</div></div></div></div>
+      </div>
+    </section>
+    <!-- Outras seções podem ser adicionadas aqui -->
+  </main>
+
+  <footer>
+    &copy; 2025 Restaurante Mexicano. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    // Slideshow
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let i;
+      let slides = document.getElementsByClassName("slide");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}
+      slides[slideIndex-1].style.display = "block";
+      setTimeout(showSlides, 3000);
+    }
+
+    // Fade-in ao rolar (seções, títulos, cards, depoimentos, formulário)
+    function fadeInOnScroll() {
+      const elements = document.querySelectorAll('section, h2, .menu-item, .depoimento, form');
+      elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', fadeInOnScroll);
+    window.addEventListener('load', fadeInOnScroll);
+
+    // Parallax no slideshow
+    window.addEventListener('scroll', function() {
+      const slideshow = document.getElementById('parallax-slideshow');
+      if (slideshow) {
+        const scrolled = window.scrollY;
+        const imgs = slideshow.querySelectorAll('img');
+        imgs.forEach(img => {
+          img.style.transform = `translateY(${scrolled * 0.15}px) scale(1.05)`;
+        });
+      }
+    });
+
+    // Clique/touch para virar card no mobile
+    document.querySelectorAll('.menu-item').forEach(function(card){
+      card.addEventListener('click', function(){
+        this.classList.toggle('flipped');
+      });
+    });
+  </script>
+</body>
+</html>
+<!--       <table class="nutri-table">
+ -->    
