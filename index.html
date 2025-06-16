@@ -2,9 +2,70 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Restaurante Mexicano</title>
+  <title>Tierra Mexicana</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+
+.titulo-depoimentos {
+  text-align: center;
+  color: #e65100; /* opcional, para combinar com o tema */
+  margin-bottom: 24px;
+}    
+
+.depoimento .cliente {
+  display: block;
+  margin-top: 48px; /* aumenta o espaço acima do nome */
+  font-weight: bold;
+  color: #e65100;
+  font-style: normal;
+  text-align: right;
+}
+
+.depoimentos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.depoimento {
+  flex: 0 0 30%;
+  max-width: 30%;
+  min-width: 120px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 18px;
+}
+
+@media (max-width: 950px) {
+  .depoimento {
+    flex: 0 1 48%;
+    max-width: 48%;
+  }
+}
+@media (max-width: 600px) {
+  .depoimento {
+    flex: 1 1 100%;
+    max-width: 98vw;
+  }
+}
+    
+    @media (max-width: 950px) {
+      .depoimento {
+        flex: 1 1 45%;
+        max-width: 48%;
+      }
+    }
+    @media (max-width: 600px) {
+      .depoimento {
+        flex: 1 1 100%;
+        max-width: 98vw;
+      }
+    }
 
      .menu-item .desc {
       display: none;
@@ -359,7 +420,7 @@
 </head>
 <body>
   <header>
-    <h1>Restaurante Mexicano</h1>
+    <h1>Tierra Mexicana</h1>
     <p>Sabores autênticos do México para você!</p>
   </header>
   <nav>
@@ -471,13 +532,46 @@
         <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://paribar.com.br/wp-content/uploads/2022/03/marguerita-de-morango-1.jpg" alt="Margarita de Morango"><h3>Margarita de Morango</h3><div class="preco">R$ 20,00</div></div><div class="card-back"><div class="desc">Versão especial da margarita, com morangos frescos.</div></div></div></div>
         <div class="menu-item"><div class="card-inner"><div class="card-front"><img src="https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/99636556-4A2C-4D83-AF0D-DBC90B85A501/Derivates/6fea59e8-620b-4ca3-9204-a0543d882dda.jpg" alt="Água de Horchata"><h3>Água de Horchata</h3><div class="preco">R$ 9,00</div></div><div class="card-back"><div class="desc">Bebida doce de arroz, canela e leite, típica do México.</div></div></div></div>
       </div>
+     </div> 
     </section>
     <!-- Outras seções podem ser adicionadas aqui -->
   </main>
-
-  <footer>
-    &copy; 2025 Restaurante Mexicano. Todos os direitos reservados.
-  </footer>
+   
+    <h2 class="titulo-depoimentos">Avaliações de Clientes</h2>
+    <div class="depoimentos">
+      <div class="depoimento">
+        <p>"A melhor guacamole que já comi! Atendimento excelente."</p>
+        <span class="cliente">— Renata C.</span>
+      </div>
+      <div class="depoimento">
+        <p>"Ambiente aconchegante e comida deliciosa. Recomendo!"</p>
+        <span class="cliente">— Tarciso F.</span>
+      </div>
+      <div class="depoimento">
+        <p>"Voltarei sempre! Os nachos são incríveis e deliciosos. Só não é mais delicioso que o dono desse restaurante👄"</p>
+        <span class="cliente">— Yasmin S.</span>
+      </div>
+          <div class="depoimento">
+           <p>"Comida mexicana incrível! Sabor autêntico e atendimento rápido."</p>
+          <span class="cliente">— Mirella M.</span>
+        </div>   
+          <div class="depoimento">
+          <p>"Tacos deliciosos e ambiente aconchegante! O melhor restaurante mexicano da cidade."</p>
+          <span class="cliente">— Sidcley V.</span>
+        </div>
+          <div class="depoimento">
+           <p>"Esse restaurante mexicano é incrível! A comida é fantástica, eu sou um fã! Siuuuuuuu!!."</p>
+           <span class="cliente">— Cristiano R.</span>
+        </div>  
+          <div class="depoimento">
+           <p>"Comida fresca e saborosa! O guacamole é incrível. Foi indicação do meu papai Cr7."</p>
+           <span class="cliente">— Lionel M.</span>
+        </div>
+          <div class="depoimento">
+           <p>"Me lesionei mais uma vez só pra poder vir experimentar o cardápio do Tierra mexicana."</p>
+           <span class="cliente">—  Neymar Jr.</span>
+         </div> 
+   </section>
 
   <script>
     // Slideshow
@@ -528,6 +622,9 @@
     });
   </script>
 </body>
+  </footer>
+</body>
 </html>
 <!--       <table class="nutri-table">
  -->    
+<footer>
